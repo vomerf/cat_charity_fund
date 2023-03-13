@@ -1,2 +1,2 @@
-from .charityproject import CharityProject # noqa
-from .donation import Donation # noqa
+from .charityproject import CharityProject  # noqa
+from .donation import Donation  # noqa

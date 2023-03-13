@@ -1,8 +1,8 @@
-from app.core.db import ProjectDonation
+from sqlalchemy import Column, String, Text
 
-from sqlalchemy import String, Column, Text
+from .abstact_model import ProjectDonation
 
 
 class CharityProject(ProjectDonation):
     name = Column(String(100), unique=True, nullable=False)
-    description = Column(Text)
+    description = Column(Text, nullable=False)

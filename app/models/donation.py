@@ -1,6 +1,6 @@
-from app.core.db import Base, ProjectDonation
-
 from sqlalchemy import Column, Text
+
+from .abstact_model import ProjectDonation
 
 
 class Donation(ProjectDonation):
