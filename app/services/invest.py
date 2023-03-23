@@ -14,14 +14,14 @@ async def update_account(
     db_donation: Donation,
     data_project: dict,
     data_donation: dict,
-    flag: str,
+    status: str,
 ):
-    if flag == 'close_project':
+    if status == 'close_project':
         setattr(db_donation, 'invested_amount', data_donation['invested_amount'])
         setattr(db_project, 'invested_amount', data_project['invested_amount'])
         setattr(db_project, 'fully_invested', True)
         setattr(db_project, 'close_date', datetime.utcnow())
-    if flag == 'close_donate':
+    if status == 'close_donate':
         setattr(db_project, 'invested_amount', data_project['invested_amount'])
         setattr(db_donation, 'invested_amount', data_donation['invested_amount'])
         setattr(db_donation, 'fully_invested', True)
@@ -50,22 +50,22 @@ async def invest(
             db_obj_data['invested_amount'] += balance_of_created_object
             data_act['invested_amount'] += balance_of_created_object
             if isinstance(db_obj, CharityProject):
-                flag = 'close_project'
-                await update_account(db_obj, act, db_obj_data, data_act, flag)
+                status = 'close_project'
+                await update_account(db_obj, act, db_obj_data, data_act, status)
             else:
-                flag = 'close_donate'
-                await update_account(act, db_obj, data_act, db_obj_data, flag)
+                status = 'close_donate'
+                await update_account(act, db_obj, data_act, db_obj_data, status)
             lst.append(act)
             break
         elif balance_of_created_object > balance_existing_object:
             db_obj_data['invested_amount'] += balance_existing_object
             data_act['invested_amount'] += balance_existing_object
             if isinstance(db_obj, CharityProject):
-                flag = 'close_donate'
-                await update_account(db_obj, act, db_obj_data, data_act, flag)
+                status = 'close_donate'
+                await update_account(db_obj, act, db_obj_data, data_act, status)
             else:
-                flag = 'close_project'
-                await update_account(act, db_obj, data_act, db_obj_data, flag)
+                status = 'close_project'
+                await update_account(act, db_obj, data_act, db_obj_data, status)
             balance_of_created_object -= balance_existing_object
             lst.append(act)
         elif balance_of_created_object == balance_existing_object:
@@ -73,17 +73,17 @@ async def invest(
             data_act['invested_amount'] += balance_of_created_object
             if isinstance(db_obj, CharityProject):
                 await update_account(
-                    db_obj, act, db_obj_data, data_act, flag='close_donate'
+                    db_obj, act, db_obj_data, data_act, status='close_donate'
                 )
                 await update_account(
-                    db_obj, act, db_obj_data, data_act, flag='close_project'
+                    db_obj, act, db_obj_data, data_act, status='close_project'
                 )
             else:
                 await update_account(
-                    act, db_obj, data_act, db_obj_data, flag='close_donate'
+                    act, db_obj, data_act, db_obj_data, status='close_donate'
                 )
                 await update_account(
-                    act, db_obj, data_act, db_obj_data, flag='close_project'
+                    act, db_obj, data_act, db_obj_data, status='close_project'
                 )
             lst.append(act)
             break
@@ -93,7 +93,6 @@ async def invest(
     await session.commit()
     await session.refresh(db_obj)
     return db_obj
-
 
 
 # async def invest_project(

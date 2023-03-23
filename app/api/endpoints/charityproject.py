@@ -21,7 +21,8 @@ router = APIRouter()
     '/',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
-    response_model_exclude={'close_date'}
+    response_model_exclude_none=True
+    # response_model_exclude={'close_date'}
 )
 async def create_new_charityproject(
     project: CharityProjectCreate,
