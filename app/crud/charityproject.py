@@ -1,10 +1,13 @@
 from datetime import datetime
 from typing import Optional
+
 from sqlalchemy import false, select
-from app.models.charity_project import CharityProject
-from app.schemas.charityproject import CharityProjectCreate, CharityProjectUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.crud.base import CRUDBase
+from app.models.charity_project import CharityProject
+from app.schemas.charityproject import (CharityProjectCreate,
+                                        CharityProjectUpdate)
 
 
 class CRUDProject(

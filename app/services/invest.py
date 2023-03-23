@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Union
 
+from fastapi.encoders import jsonable_encoder
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.crud.charityproject import project_crud
+from app.crud.donation import donation_crud
 from app.models.charity_project import CharityProject
 from app.models.donation import Donation
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.crud.donation import donation_crud
-from app.crud.charityproject import project_crud
-from fastapi.encoders import jsonable_encoder
 
 
 async def update_account(
@@ -94,6 +95,9 @@ async def invest(
     await session.refresh(db_obj)
     return db_obj
 
+#---------------------------------------------
+
+# Оставил для себя, потом удалю!!
 
 # async def invest_project(
 #     session: AsyncSession,
