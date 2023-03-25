@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -10,7 +11,6 @@ from app.crud.charityproject import project_crud
 from app.schemas.charityproject import (CharityProjectCreate, CharityProjectDB,
                                         CharityProjectUpdate)
 from app.services.invest import invest
-from http import HTTPStatus
 
 
 router = APIRouter()

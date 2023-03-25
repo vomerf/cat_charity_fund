@@ -1,9 +1,9 @@
-# app/api/validators.py
+from http import HTTPStatus
+
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charityproject import project_crud
-from http import HTTPStatus
 
 
 async def check_name_duplicate(
