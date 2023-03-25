@@ -10,6 +10,7 @@ from app.models import User
 from app.schemas.donation import DonationCreate, DonationDB
 from app.services.invest import invest
 
+
 router = APIRouter()
 
 

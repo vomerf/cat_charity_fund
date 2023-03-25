@@ -10,6 +10,8 @@ from app.crud.charityproject import project_crud
 from app.schemas.charityproject import (CharityProjectCreate, CharityProjectDB,
                                         CharityProjectUpdate)
 from app.services.invest import invest
+from http import HTTPStatus
+
 
 router = APIRouter()
 
@@ -18,8 +20,7 @@ router = APIRouter()
     '/',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
-    response_model_exclude_none=True
-    # response_model_exclude={'close_date'}
+    response_model_exclude_none=True,
 )
 async def create_new_charityproject(
     project: CharityProjectCreate,
@@ -58,12 +59,12 @@ async def partially_update_project(
     )
     if project.fully_invested:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='Закрытый проект нельзя редактировать!'
         )
     if obj_in.full_amount is not None and project.invested_amount > obj_in.full_amount:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='Нельзя уменьшить сумму сбора ниже чем собранно денег.'
         )
     if obj_in.name is not None:
@@ -86,13 +87,13 @@ async def delete_or_close_project(
     project = await check_project_exist(project_id, session)
     if project.fully_invested:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='В проект были внесены средства, не подлежит удалению!'
         )
     if project.invested_amount > 0:
         project = await project_crud.close_project(project, session)
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='В проект были внесены средства, не подлежит удалению!'
         )
     project = await project_crud.remove(project, session)
